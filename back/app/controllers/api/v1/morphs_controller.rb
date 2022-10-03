@@ -4,4 +4,8 @@ class Api::V1::MorphsController < ApplicationController
 
     render json: @morphs
   end
+
+  def calculate
+
+  end
 end
