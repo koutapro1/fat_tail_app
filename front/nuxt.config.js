@@ -36,6 +36,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/vuetify',
+    'nuxt-animejs'
   ],
   /*
   ** Nuxt.js modules
@@ -80,6 +81,7 @@ export default {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
+    },
+    hardSource: true
   }
 }
