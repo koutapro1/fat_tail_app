@@ -91,7 +91,7 @@
               <v-col class="egg-image" justify="center">
                 <img src="~assets/images/stems/egg.png">
                 <div class="button-area">
-                  <button class="ok-button">OK</button>
+                  <button @click="searchResult" class="ok-button">OK</button>
                 </div>
               </v-col>
             </v-row>
@@ -278,7 +278,13 @@
         })
       },
       searchResult() {
-        axios.post("/morphs").then(res => {
+        axios.post("/morphs/calculate",
+        {
+          male_visual: this.selected_male_visual,
+          male_het: this.selected_male_het,
+          female_visual: this.selected_female_visual,
+          female_het: this.selected_female_het
+        }).then(res => {
           if (res.data) {
             this.results = res.data
           }
