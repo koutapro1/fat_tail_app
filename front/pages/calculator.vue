@@ -95,6 +95,13 @@
                 </div>
               </v-col>
             </v-row>
+            <!-- <ul>
+              <li
+                v-for="result in results"
+              >
+                {{result.visual}} het{{result.het}}
+              </li>
+            </ul> -->
           </div>
         </div>
       </v-container>
@@ -103,6 +110,14 @@
 </template>
 
 <style>
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 1s;
+  }
+  .page-enter,
+  .page-leave-active {
+    opacity: 0;
+  }
   .main-container
   {
     position: relative;
@@ -111,7 +126,6 @@
   }
   .top-images
   {
-    /* min-height: 35vh; */
     min-height: 11rem;
   }
   .left-leaf
@@ -147,10 +161,6 @@
   }
   .explanation
   {
-    /* position: relative;
-    top: -5rem; */
-    /* left: 50%;
-    transform: translateX(-50%); */
     text-align: center;
     font-size: 0.8rem;
     font-weight: bold;
@@ -160,10 +170,6 @@
   {
     display: flex;
     justify-content: center;
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
   }
   .search-form
   {
@@ -240,15 +246,7 @@
   {
     color: white !important;
   }
-  /* .theme--light.v-select .v-select__selections
-  {
-    color: white !important;
-  } */
-  /* .v-select__selection,
-.v-select__selection--comma,
-.v-select.v-text-field input {
-  color: white !important;
-} */
+
 </style>
 
 <script>
@@ -278,18 +276,16 @@
         })
       },
       searchResult() {
-        axios.post("/morphs/calculate",
-        {
-          male_visual: this.selected_male_visual,
-          male_het: this.selected_male_het,
-          female_visual: this.selected_female_visual,
-          female_het: this.selected_female_het
-        }).then(res => {
-          if (res.data) {
-            this.results = res.data
+        this.$router.push({
+          path: "/result",
+          query: {
+            male_visual: this.selected_male_visual,
+            male_het: this.selected_male_het,
+            female_visual: this.selected_female_visual,
+            female_het: this.selected_female_het
           }
         })
-      }
+      },
     }
   }
 </script>
