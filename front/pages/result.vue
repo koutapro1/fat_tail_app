@@ -8,24 +8,34 @@
           {{result.visual}} het{{result.het}}
         </li>
       </ul>
+      <ul>
+        <li
+          v-for="morph in morphs"
+        >
+          {{morph.name}}
+        </li>
+      </ul>
     </v-main>
   </v-app>
 </template>
 
 <script>
   import axios from "~/plugins/axios"
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     layout: 'plain',
     data() {
       return {
-        morphs: [],
         selected_male_visual: this.$route.query.male_visual,
         selected_male_het: this.$route.query.male_het,
         selected_female_visual: this.$route.query.female_visual,
         selected_female_het: this.$route.query.female_het,
         results: []
       }
+    },
+    computed: {
+      ...mapGetters(["morphs"])
     },
     created() {
       this.searchResult();
@@ -43,7 +53,6 @@
         }).then(res => {
           if (res.data) {
             this.results = res.data
-            console.log(res.data)
           }
         })
       },

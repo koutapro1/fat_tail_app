@@ -250,13 +250,12 @@
 </style>
 
 <script>
-  import axios from "~/plugins/axios"
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     layout: 'plain',
     data() {
       return {
-        morphs: [],
         selected_male_visual: [],
         selected_male_het: [],
         selected_female_visual: [],
@@ -264,17 +263,14 @@
         results: []
       }
     },
+    computed: {
+      ...mapGetters(["morphs"])
+    },
     created() {
       this.fetchMorphs();
     },
     methods: {
-      fetchMorphs() {
-        axios.get("/morphs").then(res => {
-          if (res.data) {
-            this.morphs = res.data
-          }
-        })
-      },
+      ...mapActions(["fetchMorphs"]),
       searchResult() {
         this.$router.push({
           path: "/result",
