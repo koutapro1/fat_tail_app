@@ -12,9 +12,9 @@
             Normal
           </span>
         </div>
-        <div class="het pl-2 pr-5">het
+        <div v-if="result.het.length > 0" class="het pl-2 pr-5">
           <span v-for="het in result.het">
-            {{het}}
+            het {{het}}
           </span>
         </div>
         <div class="possibility">
