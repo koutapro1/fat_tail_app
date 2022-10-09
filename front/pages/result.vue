@@ -18,7 +18,7 @@
           </span>
         </div>
         <div class="possibility">
-          {{result.possibility}}
+          {{result.possibility}}%
         </div>
       </div>
 

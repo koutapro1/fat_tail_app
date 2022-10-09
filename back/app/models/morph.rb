@@ -114,11 +114,12 @@ class Morph < ApplicationRecord
       end
       [[:visual, visual], [:het, het]]
     end
-
     result_arr.map!{|x| x.to_h}
+    # -------------------------------------------
+    # 可能性を算出
     i = 0
     while i < result_arr.length do
-      result_arr[i][:possibility] = pattern_count.values[i]
+      result_arr[i][:possibility] = pattern_count.values[i].quo(denominator).to_f * 100
       i += 1
     end
     p result_arr
