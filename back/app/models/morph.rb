@@ -102,14 +102,16 @@ class Morph < ApplicationRecord
     pattern_count = pattern_count.map{|k, v| [k, v / gcd]}.to_h
     # -------------------------------------------
     # 表現とヘテロの判定
+    morph_names = Morph.pluck(:name)
+    morph_symbols = Morph.pluck(:symbol)
     result_arr = pattern_count.keys.map do |ar|
       visual = []
       het = []
       ar.each do |s|
         if is_visual?(s)
-          visual << s[0, 1]
+          visual << morph_names[morph_symbols.index(s[0, 1])]
         elsif is_het?(s)
-          het << s[0, 1]
+          het << morph_names[morph_symbols.index(s[0, 1])]
         end
       end
       [[:visual, visual], [:het, het]]
@@ -122,6 +124,6 @@ class Morph < ApplicationRecord
       result_arr[i][:possibility] = pattern_count.values[i].quo(denominator).to_f * 100
       i += 1
     end
-    p result_arr
+    result_arr
   end
 end
