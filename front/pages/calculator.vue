@@ -36,7 +36,7 @@
                 <div class="male-select-container">
                   <v-autocomplete
                     class="male-visual-select"
-                    v-model="selected_male_visual"
+                    v-model="male_visual"
                     :items="morphs"
                     label="male visual"
                     item-value="symbol"
@@ -47,7 +47,7 @@
                     multiple
                   ></v-autocomplete>
                   <v-autocomplete
-                    v-model="selected_male_het"
+                    v-model="male_het"
                     :items="morphs"
                     label="male het"
                     item-value="symbol"
@@ -63,7 +63,7 @@
                 <h2>♀ Female</h2>
                 <div class="female-select-container">
                   <v-autocomplete
-                    v-model="selected_female_visual"
+                    v-model="female_visual"
                     :items="morphs"
                     label="female visual"
                     item-value="symbol"
@@ -74,7 +74,7 @@
                     multiple
                   ></v-autocomplete>
                   <v-autocomplete
-                    v-model="selected_female_het"
+                    v-model="female_het"
                     :items="morphs"
                     label="female het"
                     item-value="symbol"
@@ -91,17 +91,10 @@
               <v-col class="egg-image" justify="center">
                 <img src="~assets/images/stems/egg.png">
                 <div class="button-area">
-                  <button @click="searchResult" class="ok-button">OK</button>
+                  <button @click="moveToResultPage" class="ok-button">OK</button>
                 </div>
               </v-col>
             </v-row>
-            <!-- <ul>
-              <li
-                v-for="result in results"
-              >
-                {{result.visual}} het{{result.het}}
-              </li>
-            </ul> -->
           </div>
         </div>
       </v-container>
@@ -256,11 +249,10 @@
     layout: 'plain',
     data() {
       return {
-        selected_male_visual: [],
-        selected_male_het: [],
-        selected_female_visual: [],
-        selected_female_het: [],
-        results: []
+        male_visual: [],
+        male_het: [],
+        female_visual: [],
+        female_het: [],
       }
     },
     computed: {
@@ -271,14 +263,14 @@
     },
     methods: {
       ...mapActions(["fetchMorphs"]),
-      searchResult() {
+      moveToResultPage() {
         this.$router.push({
           path: "/result",
           query: {
-            male_visual: this.selected_male_visual,
-            male_het: this.selected_male_het,
-            female_visual: this.selected_female_visual,
-            female_het: this.selected_female_het
+            male_visual: this.male_visual,
+            male_het: this.male_het,
+            female_visual: this.female_visual,
+            female_het: this.female_het
           }
         })
       },

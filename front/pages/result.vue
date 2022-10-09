@@ -1,36 +1,43 @@
 <template>
   <v-app>
     <v-main>
-      <ul>
-        <li
-          v-for="result in results"
-        >
-          {{result.visual}} het{{result.het}}
-        </li>
-      </ul>
-      <ul>
-        <li
-          v-for="morph in morphs"
-        >
-          {{morph.name}}
-        </li>
-      </ul>
+      <div v-for="result in results" class="d-flex">
+        <div v-if="result.visual.length > 0" class="visual">
+          <span v-for="visual in result.visual">
+            {{visual}}
+          </span>
+        </div>
+        <div v-else class="visual">
+          <span>
+            Normal
+          </span>
+        </div>
+        <div class="het pl-2 pr-5">het
+          <span v-for="het in result.het">
+            {{het}}
+          </span>
+        </div>
+        <div class="possibility">
+          {{result.possibility}}
+        </div>
+      </div>
+
     </v-main>
   </v-app>
 </template>
 
 <script>
   import axios from "~/plugins/axios"
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     layout: 'plain',
     data() {
       return {
-        selected_male_visual: this.$route.query.male_visual,
-        selected_male_het: this.$route.query.male_het,
-        selected_female_visual: this.$route.query.female_visual,
-        selected_female_het: this.$route.query.female_het,
+        male_visual: this.$route.query.male_visual,
+        male_het: this.$route.query.male_het,
+        female_visual: this.$route.query.female_visual,
+        female_het: this.$route.query.female_het,
         results: []
       }
     },
@@ -45,10 +52,10 @@
         axios.get("/morphs/calculate",
         {
           params: {
-            male_visual: this.selected_male_visual,
-            male_het: this.selected_male_het,
-            female_visual: this.selected_female_visual,
-            female_het: this.selected_female_het
+            male_visual: this.male_visual,
+            male_het: this.male_het,
+            female_visual: this.female_visual,
+            female_het: this.female_het
           }
         }).then(res => {
           if (res.data) {
