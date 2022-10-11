@@ -103,14 +103,6 @@
 </template>
 
 <style>
-  .page-enter-active,
-  .page-leave-active {
-    transition: opacity 1s;
-  }
-  .page-enter,
-  .page-leave-active {
-    opacity: 0;
-  }
   .main-container
   {
     position: relative;
@@ -124,21 +116,27 @@
   .left-leaf
   {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -300px;
+    left: -300px;
+    z-index: 5;
   }
   .right-leaf
   {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -300px;
+    right: -300px;
+    z-index: 5;
   }
   .title
   {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    top: -300px;
+    z-index: 10;
+  }
+  .title img
+  {
+    display: block;
+    margin: auto;
   }
   .left-shadow
   {
@@ -197,10 +195,11 @@
     justify-content: center;
     position: absolute;
     top: 13rem;
+    z-index: 11;
   }
   .egg-image img
   {
-    z-index: 100;
+    /* z-index: 100; */
   }
   .button-area
   {
@@ -212,7 +211,6 @@
   }
   .ok-button
   {
-    
     background-color: rgb(199,120,90);
     color: rgb(248,255,255);
     border: solid 8px rgb(248,255,255);
@@ -244,6 +242,7 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
+  import anime from 'animejs'
 
   export default {
     layout: 'plain',
@@ -261,6 +260,9 @@
     created() {
       this.fetchMorphs();
     },
+    mounted() {
+      this.setAnimation();
+    },
     methods: {
       ...mapActions(["fetchMorphs"]),
       moveToResultPage() {
@@ -274,6 +276,67 @@
           }
         })
       },
+      setAnimation() {
+        const animation = anime.timeline({});
+        const xMax = 16;
+
+        animation
+        .add({
+          targets: '.left-leaf',
+          translateX: 300,
+          translateY: 300,
+          duration: 500,
+          easing: 'easeInOutBack'
+        })
+        .add({
+          targets: '.right-leaf',
+          translateX: -300,
+          translateY: 300,
+          duration: 500,
+          easing: 'easeInOutBack'
+        }, '-=350')
+        .add({
+          targets: ['.left-shadow', '.right-shadow'],
+          easing: 'easeInOutSine',
+          duration: 600,
+          opacity: [0, 1]
+        }, 100)
+        .add({
+          targets: '.search-form',
+          easing: 'easeInOutSine',
+          duration: 600,
+          opacity: [0, 1]
+        }, 100)
+        .add({
+          targets: '.title',
+          translateY: 300,
+          duration: 1000,
+          easing: 'easeOutBounce'
+        })
+        .add({
+          targets: '.egg-image',
+          easing: 'easeInOutSine',
+          duration: 550,
+          scale: [1.4, 1, 1],
+          translateX: [
+            {
+              value: xMax * -1,
+            },
+            {
+              value: xMax,
+            },
+            {
+              value: xMax/-2,
+            },
+            {
+              value: xMax/2,
+            },
+            {
+              value: 0
+            }
+          ],
+        })
+      }
     }
   }
 </script>
