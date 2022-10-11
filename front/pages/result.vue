@@ -13,8 +13,9 @@
           </span>
         </div>
         <div v-if="result.het.length > 0" class="het pl-2 pr-5">
+          het
           <span v-for="het in result.het">
-            het {{het}}
+            {{het}}
           </span>
         </div>
         <div class="possibility">
