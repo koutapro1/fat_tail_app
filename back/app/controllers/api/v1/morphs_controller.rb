@@ -6,8 +6,9 @@ class Api::V1::MorphsController < ApplicationController
   end
 
   def calculate
-    result = Morph.calc_morph_result(params)
+    calculation = CalcResultInteractor.call(params)
+    result = calculation.result
 
-    render json: result
+    render json: result if calculation.success?
   end
 end
