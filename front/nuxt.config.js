@@ -83,5 +83,6 @@ export default {
     extend (config, ctx) {
     },
     hardSource: true
-  }
+  },
+  components: true
 }
