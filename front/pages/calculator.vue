@@ -2,7 +2,8 @@
   <v-app>
     <v-main>
       <v-container fluid class="main-container">
-        <div class="top-images">
+        <top-images-component />
+        <!-- <div class="top-images">
           <div class="left-leaf">
             <img src="~assets/images/stems/leaf1.png">
           </div>
@@ -18,7 +19,7 @@
           <div class="right-shadow">
             <img src="~assets/images/stems/right-shadow.png">
           </div>
-        </div>
+        </div> -->
         <div class="explanation">
           <p>
             All you need to do now is choose the genetics of your pairing below.<br>

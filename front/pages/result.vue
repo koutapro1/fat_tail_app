@@ -1,31 +1,61 @@
 <template>
   <v-app>
     <v-main>
-      <div v-for="result in results" class="d-flex">
-        <div v-if="result.visual.length > 0" class="visual">
-          <span v-for="visual in result.visual">
-            {{visual}}
-          </span>
+      <v-container fluid class="main-container">
+        <top-images-component />
+        <div v-for="result in results" class="d-flex">
+          <div v-if="result.visual.length > 0" class="visual">
+            <span v-for="visual in result.visual">
+              {{visual}}
+            </span>
+          </div>
+          <div v-else class="visual">
+            <span>
+              Normal
+            </span>
+          </div>
+          <div v-if="result.het.length > 0" class="het pl-2 pr-5">
+            het
+            <span v-for="het in result.het">
+              {{het}}
+            </span>
+          </div>
+          <div class="possibility">
+            {{result.possibility}}%
+          </div>
         </div>
-        <div v-else class="visual">
-          <span>
-            Normal
-          </span>
-        </div>
-        <div v-if="result.het.length > 0" class="het pl-2 pr-5">
-          het
-          <span v-for="het in result.het">
-            {{het}}
-          </span>
-        </div>
-        <div class="possibility">
-          {{result.possibility}}%
-        </div>
-      </div>
-
+      </v-container>
     </v-main>
   </v-app>
 </template>
+
+<style>
+  .left-leaf
+  {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 5;
+  }
+  .right-leaf
+  {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 5;
+  }
+  .title
+  {
+    position: relative;
+    top: 0px;
+    z-index: 10;
+  }
+  .title img
+  {
+    display: block;
+    margin: auto;
+  }
+</style>
 
 <script>
   import axios from "~/plugins/axios"
