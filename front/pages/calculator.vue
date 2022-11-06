@@ -159,6 +159,17 @@
     transform: translate(0,2px);
     box-shadow: 2px 1px 8px rgba(0, 0, 0, 0.7);
   }
+  /* 結果ページ -------- */
+  .v-data-table {
+    position: relative;
+    z-index: 10;
+  }
+  .v-data-table th,td {
+    background-color: rgb(179,135,88);
+    color: rgb(248,255,255);
+    border: solid 4px rgb(255,255,250);
+    border-radius: 5px;
+  }
 
   .theme--light.v-label
   {
