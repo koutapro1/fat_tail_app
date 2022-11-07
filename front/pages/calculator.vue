@@ -12,17 +12,22 @@
             (as you may have HETs that you are not aware of and haven't added them to the calculation).
           </p>
         </div>
-        <CalculatorComponent
-          v-if="isVisibleCalculator"
-          :selected_morphs="selected_morphs"
-          :morphs="morphs"
-          @search-result="searchResult"
-          @set-selected-morphs="setSelectedMorphs"
-        />
-        <ResultComponent
-          v-if="isVisibleResult"
-          :results="results"
-        />
+        <transition name="fade" mode="out-in">
+          <CalculatorComponent
+            v-if="isVisibleCalculator"
+            key="calculator"
+            :selected_morphs="selected_morphs"
+            :morphs="morphs"
+            @search-result="searchResult"
+            @set-selected-morphs="setSelectedMorphs"
+          />
+          <ResultComponent
+            key="result"
+            v-if="isVisibleResult"
+            :results="results"
+            @back-to-calculator="handleShowCalculator"
+          />
+        </transition>
       </v-container>
     </v-main>
   </v-app>
@@ -87,7 +92,7 @@
   {
     position: relative;
     min-width: 70vw;
-    height: max-content;
+    max-height: 19rem;
   }
   .search-form h2
   {
@@ -119,13 +124,10 @@
   {
     position: relative;
     top: -5rem;
+    height: 0;
     z-index: 20;
     pointer-events: none;
   }
-  /* .submit-area :not(button)
-  {
-    pointer-events: none;
-  } */
   .egg-image
   {
     display: block;
@@ -160,7 +162,12 @@
     box-shadow: 2px 1px 8px rgba(0, 0, 0, 0.7);
   }
   /* 結果ページ -------- */
+  .result-area {
+    position: relative;
+    max-height: 28rem;
+  }
   .v-data-table {
+    max-height: 28rem;
     position: relative;
     z-index: 10;
   }
@@ -171,9 +178,42 @@
     border-radius: 5px;
   }
 
+  .theme--light.v-application
+  {
+    background-color: #FFF7D2;
+  }
+  
+
   .theme--light.v-label
   {
     color: white !important;
+  }
+  .theme--light.mdi-menu-down
+  {
+    color: white !important;
+  }
+  .theme--light.v-text-field > .v-input__control > .v-input__slot:before
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field > .v-input__control > .v-input__slot:after
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:after
+  {
+    border-color: white;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 
 </style>
@@ -215,6 +255,10 @@
       handleShowResult() {
         this.isVisibleResult = true;
         this.isVisibleCalculator = false;
+      },
+      handleShowCalculator() {
+        this.isVisibleResult = false;
+        this.isVisibleCalculator = true;
       },
       searchResult() {
         axios.get("/morphs/calculate",
