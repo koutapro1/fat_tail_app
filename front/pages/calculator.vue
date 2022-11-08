@@ -208,6 +208,10 @@
   {
     border-color: white;
   }
+  input
+  {
+    color: white;
+  }
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity 1s;
@@ -271,6 +275,10 @@
           }
         }).then(res => {
           if (res.data) {
+            for (let i = 0; i < res.data.length; i ++) {
+              res.data[i].visual = res.data[i].visual.join(', ')
+              res.data[i].het = res.data[i].het.join(', ')
+            }
             this.results = res.data
           }
         });

@@ -2,13 +2,13 @@
   <div class="result-area">
     <v-row justify="space-around" align-content="center">
       <v-col cols="8">
-        <v-data-table :headers="headers" :items="results" disable-pagination hide-default-footer class="overflow-y-auto result-table">
+        <v-data-table :headers="headers" :items="results" disable-pagination hide-default-footer class="overflow-y-auto elevation-1 result-table">
           <template v-slot:body="{ items }">
-            <tbody class="custom-body">
-              <tr v-for="result in results" :key="result.id" class="custom-tr">
-                <td><p v-for="visual in result.visual">{{visual}}</p></td>
-                <td><p v-for="het in result.het">{{het}}</p></td>
-                <td>{{result.possibility}}%</td>
+            <tbody>
+              <tr v-for="item in items" :key="item.name">
+                <td>{{item.visual}}</td>
+                <td>{{item.het}}</td>
+                <td>{{item.possibility}}%</td>
               </tr>
             </tbody>
           </template>
@@ -30,7 +30,7 @@
           { text: 'visual', value: 'visual' },
           { text: 'het', value: 'het' },
           { text: 'possibility', value: 'possibility' }
-        ]
+        ],
       }
     },
     methods: {
