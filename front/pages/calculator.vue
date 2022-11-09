@@ -40,6 +40,7 @@
     padding: 0;
     height: 100%;
   }
+  /* 背景画像 -------- */
   .top-images
   {
     min-height: 11rem;
@@ -88,6 +89,7 @@
     font-weight: bold;
     line-height: 1;
   }
+  /* モルフ入力エリア -------- */
   .search-form
   {
     position: relative;
@@ -111,6 +113,7 @@
   }
   .male-search-form, .female-search-form
   {
+    position: relative;
     background-color: rgb(179,135,88);
     border: solid 5px rgb(255,255,250);
     border-radius: 5rem;
@@ -119,6 +122,21 @@
   .male-select-container, .female-select-container
   {
     padding: 2rem;
+  }
+  .gecko-image-left
+  {
+    height: 7rem;
+    position: absolute;
+    transform: scale(-1, 1) rotate(-15deg);
+    bottom: -3rem;
+    left: -3rem;
+  }
+  .gecko-image-right
+  {
+    height: 7rem;
+    position: absolute;
+    top: -1.7rem;
+    right: -3rem;
   }
   .submit-area
   {
@@ -182,8 +200,6 @@
   {
     background-color: #FFF7D2;
   }
-  
-
   .theme--light.v-label
   {
     color: white !important;
@@ -207,6 +223,10 @@
   .theme--light.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:after
   {
     border-color: white;
+  }
+  .theme--light.v-chip:not(.v-chip--active)
+  {
+    background: white;
   }
   input
   {

@@ -28,6 +28,7 @@
               deletable-chips
               multiple
             ></v-autocomplete>
+            <img src="~assets/images/stems/oreo.png" class="gecko-image-left">
           </div>
         </v-col>
         <v-col cols="6" sm="5" class="female-search-form">
@@ -55,6 +56,7 @@
               deletable-chips
               multiple
             ></v-autocomplete>
+            <img src="~assets/images/stems/oreo.png" class="gecko-image-right">
           </div>
         </v-col>
       </v-row>
