@@ -37,6 +37,13 @@ class CalcResultInteractor
     # 最終的な組み合わせの配列を作成
     all_gene += bilateral_gene
     # -------------------------------------------
+    # ホワイトアウトを"WW"から"Ww"に変換
+    if all_gene.include?("WW")
+      all_gene.count("WW").times do
+        all_gene[all_gene.find_index("WW")] = "Ww"
+      end
+    end
+    # -------------------------------------------
     # ↑をモルフごとに分割
     all_gene = all_gene.each_slice(2).to_a
     # -------------------------------------------
@@ -99,7 +106,9 @@ class CalcResultInteractor
       visual = []
       het = []
       ar.each do |s|
-        if upper.include?(s[0,1]) && upper.include?(s[1,1])
+        if s[0,1] == "W"
+          visual << morph_names[morph_symbols.index(s[0, 1])]
+        elsif upper.include?(s[0,1]) && upper.include?(s[1,1])
           visual << morph_names[morph_symbols.index(s[0, 1])]
         elsif upper.include?(s[0,1]) && lower.include?(s[1,1])
           het << morph_names[morph_symbols.index(s[0, 1])]
