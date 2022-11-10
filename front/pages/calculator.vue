@@ -46,6 +46,10 @@
   {
     min-height: 11rem;
   }
+  img
+  {
+    pointer-events: none;
+  }
   .left-leaf
   {
     position: absolute;
