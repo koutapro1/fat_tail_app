@@ -19,7 +19,7 @@
             ></v-autocomplete>
             <v-autocomplete
               v-model="selected_morphs.male_het"
-              :items="morphs"
+              :items="het_morphs"
               label="male het"
               item-value="symbol"
               item-text="name"
@@ -47,7 +47,7 @@
             ></v-autocomplete>
             <v-autocomplete
               v-model="selected_morphs.female_het"
-              :items="morphs"
+              :items="het_morphs"
               label="female het"
               item-value="symbol"
               item-text="name"
@@ -72,6 +72,7 @@
   export default {
     props: [
       'morphs',
+      'het_morphs',
       'selected_morphs',
     ],
     computed:{

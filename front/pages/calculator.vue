@@ -18,6 +18,7 @@
             key="calculator"
             :selected_morphs="selected_morphs"
             :morphs="morphs"
+            :het_morphs="het_morphs"
             @search-result="searchResult"
             @set-selected-morphs="setSelectedMorphs"
           />
@@ -243,7 +244,6 @@
 </style>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
   import axios from "~/plugins/axios"
   import anime from 'animejs'
 
@@ -251,6 +251,8 @@
     layout: 'plain',
     data() {
       return {
+        morphs: [],
+        het_morphs: [],
         selected_morphs: {
           male_visual: [],
           male_het: [],
@@ -262,9 +264,6 @@
         isVisibleResult: false,
       }
     },
-    computed: {
-      ...mapGetters(["morphs"])
-    },
     created() {
       this.fetchMorphs();
     },
@@ -272,7 +271,15 @@
       this.setAnimation();
     },
     methods: {
-      ...mapActions(["fetchMorphs"]),
+      fetchMorphs() {
+        axios.get('morphs')
+        .then(res => {
+          this.morphs = res.data
+          this.het_morphs = this.morphs.filter((morph) => {
+            return morph.name !== "White Out"
+          })
+        })
+      },
       setSelectedMorphs(newVal) {
         this.selected_morphs = newVal;
       },
