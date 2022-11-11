@@ -280,7 +280,7 @@
         .then(res => {
           this.morphs = res.data
           this.het_morphs = this.morphs.filter((morph) => {
-            return morph.name !== "White Out"
+            return morph.name !== "White Out" && morph.name !== "Normal"
           })
         })
       },

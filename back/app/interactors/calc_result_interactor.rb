@@ -114,6 +114,7 @@ class CalcResultInteractor
           het << morph_names[morph_symbols.index(s[0, 1])]
         end
       end
+      visual << morph_names.find { |m| m =="Normal" } if visual.empty?
       [[:visual, visual], [:het, het]]
     end
     result_arr.map!{|x| x.to_h}
