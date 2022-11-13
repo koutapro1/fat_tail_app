@@ -2,23 +2,7 @@
   <v-app>
     <v-main>
       <v-container fluid class="main-container">
-        <div class="top-images">
-          <div class="left-leaf">
-            <img src="~assets/images/stems/leaf1.png">
-          </div>
-          <div class="right-leaf">
-            <img src="~assets/images/stems/leaf2.png">
-          </div>
-          <div class="title">
-            <img src="~assets/images/stems/title.png">
-          </div>
-          <div class="left-shadow">
-            <img src="~assets/images/stems/left-shadow.png">
-          </div>
-          <div class="right-shadow">
-            <img src="~assets/images/stems/right-shadow.png">
-          </div>
-        </div>
+        <top-images-component />
         <div class="explanation">
           <p>
             All you need to do now is choose the genetics of your pairing below.<br>
@@ -28,69 +12,23 @@
             (as you may have HETs that you are not aware of and haven't added them to the calculation).
           </p>
         </div>
-        <div class="search-form">
-          <v-row justify="space-around" align-content="center" class="select-area">
-            <v-col cols="6" sm="5" class="male-search-form">
-              <h2>♂ Male</h2>
-              <div class="male-select-container">
-                <v-autocomplete
-                  class="male-visual-select"
-                  v-model="male_visual"
-                  :items="morphs"
-                  label="male visual"
-                  item-value="symbol"
-                  item-text="name"
-                  color="white"
-                  chips
-                  deletable-chips
-                  multiple
-                ></v-autocomplete>
-                <v-autocomplete
-                  v-model="male_het"
-                  :items="morphs"
-                  label="male het"
-                  item-value="symbol"
-                  item-text="name"
-                  color="white"
-                  chips
-                  deletable-chips
-                  multiple
-                ></v-autocomplete>
-              </div>
-            </v-col>
-            <v-col cols="6" sm="5" class="female-search-form">
-              <h2>♀ Female</h2>
-              <div class="female-select-container">
-                <v-autocomplete
-                  v-model="female_visual"
-                  :items="morphs"
-                  label="female visual"
-                  item-value="symbol"
-                  item-text="name"
-                  color="white"
-                  chips
-                  deletable-chips
-                  multiple
-                ></v-autocomplete>
-                <v-autocomplete
-                  v-model="female_het"
-                  :items="morphs"
-                  label="female het"
-                  item-value="symbol"
-                  item-text="name"
-                  color="white"
-                  chips
-                  deletable-chips
-                  multiple
-                ></v-autocomplete>
-              </div>
-            </v-col>
-          </v-row>
-        </div>
-        <div class="submit-area">
-          <img src="~assets/images/stems/egg.png" class="egg-image">
-            <button @click="moveToResultPage" class="ok-button">OK</button>
-        </div>
+        <transition name="fade" mode="out-in">
+          <CalculatorComponent
+            v-if="isVisibleCalculator"
+            key="calculator"
+            :selected_morphs="selected_morphs"
+            :morphs="morphs"
+            :het_morphs="het_morphs"
+            @search-result="searchResult"
+            @set-selected-morphs="setSelectedMorphs"
+          />
+          <ResultComponent
+            key="result"
+            v-if="isVisibleResult"
+            :results="results"
+            @back-to-calculator="handleShowCalculator"
+          />
+        </transition>
       </v-container>
     </v-main>
   </v-app>
@@ -103,9 +41,14 @@
     padding: 0;
     height: 100%;
   }
+  /* 背景画像 -------- */
   .top-images
   {
     min-height: 11rem;
+  }
+  img
+  {
+    pointer-events: none;
   }
   .left-leaf
   {
@@ -151,11 +94,12 @@
     font-weight: bold;
     line-height: 1;
   }
+  /* モルフ入力エリア -------- */
   .search-form
   {
     position: relative;
     min-width: 70vw;
-    height: max-content;
+    max-height: 19rem;
   }
   .search-form h2
   {
@@ -174,6 +118,7 @@
   }
   .male-search-form, .female-search-form
   {
+    position: relative;
     background-color: rgb(179,135,88);
     border: solid 5px rgb(255,255,250);
     border-radius: 5rem;
@@ -183,17 +128,29 @@
   {
     padding: 2rem;
   }
+  .gecko-image-left
+  {
+    height: 7rem;
+    position: absolute;
+    transform: scale(-1, 1) rotate(-15deg);
+    bottom: -3rem;
+    left: -3rem;
+  }
+  .gecko-image-right
+  {
+    height: 7rem;
+    position: absolute;
+    top: -1.7rem;
+    right: -3rem;
+  }
   .submit-area
   {
     position: relative;
     top: -5rem;
+    height: 0;
     z-index: 20;
     pointer-events: none;
   }
-  /* .submit-area :not(button)
-  {
-    pointer-events: none;
-  } */
   .egg-image
   {
     display: block;
@@ -227,30 +184,89 @@
     transform: translate(0,2px);
     box-shadow: 2px 1px 8px rgba(0, 0, 0, 0.7);
   }
+  /* 結果ページ -------- */
+  .result-area {
+    position: relative;
+    max-height: 28rem;
+  }
+  .v-data-table {
+    max-height: 28rem;
+    position: relative;
+    z-index: 10;
+  }
+  .v-data-table th,td {
+    background-color: rgb(179,135,88);
+    color: rgb(248,255,255);
+    border: solid 4px rgb(255,255,250);
+    border-radius: 5px;
+  }
 
+  .theme--light.v-application
+  {
+    background-color: #FFF7D2;
+  }
   .theme--light.v-label
   {
     color: white !important;
+  }
+  .theme--light.mdi-menu-down
+  {
+    color: white !important;
+  }
+  .theme--light.v-text-field > .v-input__control > .v-input__slot:before
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field > .v-input__control > .v-input__slot:after
+  {
+    border-color: white;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:after
+  {
+    border-color: white;
+  }
+  .theme--light.v-chip:not(.v-chip--active)
+  {
+    background: white;
+  }
+  input
+  {
+    color: white;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 
 </style>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import axios from "~/plugins/axios"
   import anime from 'animejs'
 
   export default {
     layout: 'plain',
     data() {
       return {
-        male_visual: [],
-        male_het: [],
-        female_visual: [],
-        female_het: [],
+        morphs: [],
+        het_morphs: [],
+        selected_morphs: {
+          male_visual: [],
+          male_het: [],
+          female_visual: [],
+          female_het: [],
+        },
+        results: [],
+        isVisibleCalculator: true,
+        isVisibleResult: false,
       }
-    },
-    computed: {
-      ...mapGetters(["morphs"])
     },
     created() {
       this.fetchMorphs();
@@ -259,17 +275,45 @@
       this.setAnimation();
     },
     methods: {
-      ...mapActions(["fetchMorphs"]),
-      moveToResultPage() {
-        this.$router.push({
-          path: "/result",
-          query: {
-            male_visual: this.male_visual,
-            male_het: this.male_het,
-            female_visual: this.female_visual,
-            female_het: this.female_het
-          }
+      fetchMorphs() {
+        axios.get('morphs')
+        .then(res => {
+          this.morphs = res.data
+          this.het_morphs = this.morphs.filter((morph) => {
+            return morph.name !== "White Out" && morph.name !== "Normal"
+          })
         })
+      },
+      setSelectedMorphs(newVal) {
+        this.selected_morphs = newVal;
+      },
+      handleShowResult() {
+        this.isVisibleResult = true;
+        this.isVisibleCalculator = false;
+      },
+      handleShowCalculator() {
+        this.isVisibleResult = false;
+        this.isVisibleCalculator = true;
+      },
+      searchResult() {
+        axios.get("/morphs/calculate",
+        {
+          params: {
+            male_visual: this.selected_morphs.male_visual,
+            male_het: this.selected_morphs.male_het,
+            female_visual: this.selected_morphs.female_visual,
+            female_het: this.selected_morphs.female_het
+          }
+        }).then(res => {
+          if (res.data) {
+            for (let i = 0; i < res.data.length; i ++) {
+              res.data[i].visual = res.data[i].visual.join(', ')
+              res.data[i].het = res.data[i].het.join(', ')
+            }
+            this.results = res.data
+          }
+        });
+        this.handleShowResult();
       },
       setAnimation() {
         const animation = anime.timeline({});
