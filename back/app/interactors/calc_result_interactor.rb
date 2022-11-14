@@ -2,10 +2,18 @@ class CalcResultInteractor
   include Interactor
 
   def call
-    male_visual = context.male_visual.map { |s| s * 2 }
-    male_het = context.male_het.map { |s| s + s.downcase }
-    female_visual = context.female_visual.map { |s| s * 2 }
-    female_het = context.female_het.map { |s| s + s.downcase }
+    # -------------------------------------------
+    # 空白だったらノーマルを代入
+    male_visual = context.male_visual ||= ["N"]
+    male_het = context.male_het ||=["N"]
+    female_visual = context.female_visual ||= ["N"]
+    female_het = context.female_het ||=["N"]
+    # -------------------------------------------
+    # visualなら大文字2つ、hetなら大文字と小文字1つずつにする
+    male_visual = male_visual.map { |s| s * 2 }
+    male_het = male_het.map { |s| s + s.downcase }
+    female_visual = female_visual.map { |s| s * 2 }
+    female_het = female_het.map { |s| s + s.downcase }
     
     male = male_visual + male_het
     female = female_visual + female_het
@@ -37,6 +45,10 @@ class CalcResultInteractor
     # 最終的な組み合わせの配列を作成
     all_gene += bilateral_gene
     # -------------------------------------------
+    # ノーマルを削除
+    all_gene.delete("NN") if all_gene.include?("NN")
+    all_gene.delete("Nn") if all_gene.include?("Nn")
+    all_gene.delete("nn") if all_gene.include?("nn")
     # ホワイトアウトを"WW"から"Ww"に変換
     if all_gene.include?("WW")
       all_gene.count("WW").times do
@@ -69,14 +81,18 @@ class CalcResultInteractor
     result_arr.map!(&:sort)
     # -------------------------------------------
     # 全組み合わせ計算
-    i = 0
-    while i < result_arr.length - 1 do
-      if i == 0
-        all_patterns = result_arr[i].product(result_arr[i + 1])
-      else
-        all_patterns = all_patterns.product(result_arr[i + 1])
+    if result_arr.length <= 1
+      all_patterns = result_arr[0].map{|s| [s]}
+    else
+      i = 0
+      while i < result_arr.length - 1 do
+        if i == 0
+          all_patterns = result_arr[i].product(result_arr[i + 1])
+        else
+          all_patterns = all_patterns.product(result_arr[i + 1])
+        end
+        i += 1
       end
-      i += 1
     end
     all_patterns.map!{|a| a.join.scan(/.{1,#{2}}/)}
     # -------------------------------------------
@@ -106,7 +122,7 @@ class CalcResultInteractor
       visual = []
       het = []
       ar.each do |s|
-        if s[0,1] == "W"
+        if s[0,1] == "W" #優勢遺伝はvisualに追加
           visual << morph_names[morph_symbols.index(s[0, 1])]
         elsif upper.include?(s[0,1]) && upper.include?(s[1,1])
           visual << morph_names[morph_symbols.index(s[0, 1])]
