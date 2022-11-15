@@ -121,13 +121,15 @@ class CalcResultInteractor
     result_arr = pattern_count.keys.map do |ar|
       visual = []
       het = []
-      ar.each do |s|
-        if s[0,1] == "W" #優勢遺伝はvisualに追加
-          visual << morph_names[morph_symbols.index(s[0, 1])]
-        elsif upper.include?(s[0,1]) && upper.include?(s[1,1])
-          visual << morph_names[morph_symbols.index(s[0, 1])]
-        elsif upper.include?(s[0,1]) && lower.include?(s[1,1])
-          het << morph_names[morph_symbols.index(s[0, 1])]
+      ar.each do |symbol|
+        if symbol == "WW" #スーパーホワイトアウトを判定
+          visual << "Super White-Out"
+        elsif symbol == "Ww" #優勢遺伝はvisualに追加
+          visual << morph_names[morph_symbols.index(symbol[0, 1])]
+        elsif upper.include?(symbol[0,1]) && upper.include?(symbol[1,1])
+          visual << morph_names[morph_symbols.index(symbol[0, 1])]
+        elsif upper.include?(symbol[0,1]) && lower.include?(symbol[1,1])
+          het << morph_names[morph_symbols.index(symbol[0, 1])]
         end
       end
       visual << morph_names.find { |m| m =="Normal" } if visual.empty?
